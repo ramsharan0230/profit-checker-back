@@ -40,6 +40,7 @@ class ReportRequest extends FormRequest
             'targetMargin' => ['required', 'numeric', 'min:0'],
 
             'allProducts' => ['sometimes', 'array'],
+            'ai_suggestions' => 'nullable|string',
         ];
     }
 

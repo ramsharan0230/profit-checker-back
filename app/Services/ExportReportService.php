@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 use League\Csv\Writer;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,6 +12,7 @@ class ExportReportService
     public function generate(array $data, string $reportType): Response
     {
         $summary = $this->prepareSummaryData($data);
+        $summary['aiSuggestion'] = $data['ai_suggestions'] ?? '';
 
         return match ($reportType) {
             'pdf' => $this->generatePdf($summary),
@@ -20,6 +22,7 @@ class ExportReportService
 
     private function generatePdf(array $data): Response
     {
+        Log::info("data: ".json_encode($data));
         $pdf = Pdf::loadView('exports.summary', $data);
         $filename = 'summary-' . now()->format('Ymd_His') . '.pdf';
         return $pdf->download($filename);
@@ -55,6 +58,10 @@ class ExportReportService
         $csv->insertOne(['Gross Profit (£)', number_format($data['grossProfit'], 2)]);
         $csv->insertOne(['Margin (%)', number_format($data['margin'], 2)]);
         $csv->insertOne(['Target Margin (%)', number_format($data['targetMargin'], 2)]);
+
+        $csv->insertOne([]);
+        $csv->insertOne(['AI Suggestions']);
+        $csv->insertOne([preg_replace("/[\r\n]+/", " ", $data['aiSuggestion'])]);
 
         $filename = 'quote-summary-' . now()->format('Ymd_His') . '.csv';
 

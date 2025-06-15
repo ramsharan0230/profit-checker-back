@@ -75,6 +75,12 @@
         <p><span class="bold">Margin:</span> {{ number_format($margin, 2) }}%</p>
         <p><span class="bold">Target Margin:</span> {{ number_format($targetMargin, 2) }}%</p>
     </div>
+
+    @if (!empty($aiSuggestion))
+    <hr>
+    <h4>AI Suggestions</h4>
+    <p style="white-space: pre-line;">{{ $aiSuggestion }}</p>
+    @endif
 </body>
 
 </html>
