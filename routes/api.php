@@ -17,9 +17,3 @@ Route::post('/export-quote/csv', [ExportReportController::class, 'exportCsv']);
 Route::prefix('/report')->group(function(){
     Route::post('/export-quote-summary', [ExportReportController::class, 'exportReport']);
 });
-
-// Route::post('/suggestion', function (Request $request) {
-//     return response()->json(['test' => 'CORS test'])
-//         ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
-//         ->header('Access-Control-Allow-Credentials', 'true');
-// });
