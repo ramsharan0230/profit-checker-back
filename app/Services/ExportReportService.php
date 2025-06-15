@@ -17,6 +17,7 @@ class ExportReportService
         return match ($reportType) {
             'pdf' => $this->generatePdf($summary),
             'csv' => $this->generateCsv($summary),
+            default => response()->json(['error' => 'Invalid report type.'], 400),
         };
     }
 

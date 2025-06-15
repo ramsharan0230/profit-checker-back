@@ -90,12 +90,10 @@ class ReportRequest extends FormRequest
      */
     protected function failedValidation(Validator $validator)
     {
-        $errors = $validator->errors();
-
         throw new HttpResponseException(
             response()->json([
-                'data' => $errors,
                 'message' => 'Validation failed',
+                'errors' => $validator->errors(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY)
         );
     }
