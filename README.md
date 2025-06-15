@@ -38,7 +38,7 @@ The frontend is handled by a separate Nuxt/Vue application.
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/your-org/profit-checker-back.git
+git clone https://github.com/ramsharan0230/profit-checker-back
 cd profit-checker-back
 
 
@@ -55,6 +55,6 @@ php artisan key:generate
 ### 5. Run Migrations and Seed Data
 php artisan migrate --seed
 
-## 🧪 Run Tests
+### 🧪 Run Tests
 php artisan test
 
