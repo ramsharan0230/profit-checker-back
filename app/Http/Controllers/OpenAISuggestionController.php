@@ -9,12 +9,7 @@ use Illuminate\Http\Response;
 
 class OpenAISuggestionController extends Controller
 {
-    protected OpenAIService $openAIService;
-
-    public function __construct(OpenAIService $openAIService)
-    {
-        $this->openAIService = $openAIService;
-    }
+    public function __construct(protected OpenAIService $openAIService){}
 
     public function suggestion(Request $request)
     {
