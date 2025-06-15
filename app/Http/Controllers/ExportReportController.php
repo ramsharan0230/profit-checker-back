@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReportRequest;
 use Illuminate\Http\Request;
 use App\Services\ExportReportService;
+use Illuminate\Support\Facades\Validator;
 
 class ExportReportController extends Controller
 {
     public function __construct(protected ExportReportService $reportService) {}
 
-    public function exportReport(Request $request)
+    public function exportReport(ReportRequest $request)
     {
-        $reportType = $request->input('reportType');
+        $validated = $request->validated();
+        $reportType = $validated['reportType'];
 
         if (!in_array($reportType, ['pdf', 'csv'])) {
             throw new \InvalidArgumentException('Invalid report type.');
         }
 
-        return $this->reportService->generate($request->all(), $reportType);
+        return $this->reportService->generate($validated, $reportType);
     }
 }
-// validations
