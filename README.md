@@ -1,4 +1,4 @@
-# 📊 Specifi Profit Optimiser (Backend API)
+# 📊 Profit Optimiser (Backend API)
 
 This is a **Laravel-based API backend** for the Specifi Profit Optimiser prototype. It powers:
 
@@ -55,6 +55,6 @@ php artisan key:generate
 ### 5. Run Migrations and Seed Data
 php artisan migrate --seed
 
-### 🧪 Run Tests
+### 6. Run Tests
 php artisan test
 
