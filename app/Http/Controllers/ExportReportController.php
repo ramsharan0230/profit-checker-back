@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReportRequest;
-use Illuminate\Http\Request;
 use App\Services\ExportReportService;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class ExportReportController extends Controller
 {
@@ -13,6 +12,8 @@ class ExportReportController extends Controller
 
     public function exportReport(ReportRequest $request)
     {
+        Log::info("validated: ".json_encode($request->all()));
+
         $validated = $request->validated();
         $reportType = $validated['reportType'];
 
