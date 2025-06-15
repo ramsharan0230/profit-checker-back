@@ -57,12 +57,19 @@ class ExportReportControllerTest extends TestCase
     public function test_invalid_report_type_returns_error()
     {
         $payload = [
-            'reportType' => 'unknown'
+            'selectedItems' => [
+                ['selectedProduct' => 'Product Y', 'quantity' => 2, 'cost' => 50, 'sell' => 80],
+            ],
+            'laborHours' => 5,
+            'laborCost' => 20,
+            'fixedOverheads' => 10,
+            'targetMargin' => 25,
+            'reportType' => 'invalid-type',
         ];
 
         $response = $this->post('/api/report/export-quote-summary', $payload);
 
-        $response->assertStatus(400);
-        $response->assertJson(['error' => 'Invalid report type.']);
+        $response->assertStatus(422); 
+        $response->assertJsonFragment(['message' => 'Validation failed']);
     }
 }

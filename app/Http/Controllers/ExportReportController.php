@@ -12,7 +12,6 @@ class ExportReportController extends Controller
 
     public function exportReport(ReportRequest $request)
     {
-        Log::info("validated: ".json_encode($request->all()));
 
         $validated = $request->validated();
         $reportType = $validated['reportType'];
