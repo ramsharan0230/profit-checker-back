@@ -19,7 +19,7 @@ class ExportReportController extends Controller
         $reportType = $request->input('reportType');
 
         if (!in_array($reportType, ['pdf', 'csv'])) {
-            return response()->json(['error' => 'Invalid report type.'], 400);
+            throw new \InvalidArgumentException('Invalid report type.');
         }
 
         return $this->reportService->generate($request->all(), $reportType);

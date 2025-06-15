@@ -2,7 +2,13 @@
 
 namespace App\Exceptions;
 
+use App\Http\Responses\ApiResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -44,5 +50,41 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($request->expectsJson()) {
+            if ($exception instanceof ValidationException) {
+                return response()->json([
+                    'message' => 'Validation failed.',
+                    'errors' => $exception->errors(),
+                    'status_code' => 422,
+                ], 422);
+            }
+
+            if ($exception instanceof ModelNotFoundException) {
+                return ApiResponse::error('Resource not found.', 404);
+            }
+
+            if ($exception instanceof AuthenticationException) {
+                return ApiResponse::error('Unauthenticated.', 401);
+            }
+
+            if ($exception instanceof NotFoundHttpException) {
+                return ApiResponse::error('Endpoint not found.', 404);
+            }
+
+            if ($exception instanceof HttpExceptionInterface) {
+                return ApiResponse::error($exception->getMessage(), $exception->getStatusCode());
+            }
+
+            return ApiResponse::error(
+                app()->isLocal() ? $exception->getMessage() : 'An internal server error occurred.',
+                500
+            );
+        }
+
+        return parent::render($request, $exception);
     }
 }
