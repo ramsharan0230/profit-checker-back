@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\SaveReport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use League\Csv\Writer;
@@ -13,6 +14,7 @@ class ExportReportService
     {
         $summary = $this->prepareSummaryData($data);
         $summary['aiSuggestion'] = $data['ai_suggestions'] ?? '';
+        $summary['ip_address'] = $data['ip_address'] ?? '';
 
         return match ($reportType) {
             'pdf' => $this->generatePdf($summary),
@@ -23,9 +25,15 @@ class ExportReportService
 
     private function generatePdf(array $data): Response
     {
-        Log::info("data: ".json_encode($data));
         $pdf = Pdf::loadView('exports.summary', $data);
         $filename = 'summary-' . now()->format('Ymd_His') . '.pdf';
+
+        $reportData['filename'] = $filename;
+        $reportData['ipAddress'] = $data['ip_address'];
+        $reportData['reportType'] = 'pdf';
+
+        event(new SaveReport($reportData));
+
         return $pdf->download($filename);
     }
 
@@ -65,6 +73,12 @@ class ExportReportService
         $csv->insertOne([preg_replace("/[\r\n]+/", " ", $data['aiSuggestion'])]);
 
         $filename = 'quote-summary-' . now()->format('Ymd_His') . '.csv';
+
+        $reportData['filename'] = $filename;
+        $reportData['ipAddress'] = $data['ip_address'];
+        $reportData['reportType'] = 'csv';
+
+        event(new SaveReport($reportData));
 
         return response($csv->toString(), 200, [
             'Content-Type' => 'text/csv',
