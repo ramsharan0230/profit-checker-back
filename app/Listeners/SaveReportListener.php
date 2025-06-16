@@ -23,7 +23,6 @@ class SaveReportListener
     public function handle(SaveReport $event): void
     {
         $data = $event->data;
-        Log::info("data: " . json_encode($data));
 
         $existingReportsCount = Report::where('ip_address', $data['ipAddress'])->count();
         $version = $existingReportsCount + 1;
@@ -38,7 +37,7 @@ class SaveReportListener
             'ip_address'   => $data['ipAddress'] ?? null,
             'report_type'  => $data['reportType'] ?? null,
             'url'          => $url,
-            
+
         ]);
     }
 }
