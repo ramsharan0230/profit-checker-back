@@ -13,8 +13,8 @@ class OpenAIService
         float $margin,
         float $targetMargin
     ): string {
+        return "";
         $model = config('openai.api_model');
-
         $selectedSummary = collect($selectedItems)->map(function ($item) {
             return "- {$item['selectedProduct']} | Qty: {$item['quantity']} | Cost: £{$item['cost']} | Sell: £{$item['sell']}";
         })->implode("\n");

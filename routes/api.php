@@ -16,4 +16,5 @@ Route::post('/export-quote/csv', [ExportReportController::class, 'exportCsv']);
 
 Route::prefix('/report')->group(function(){
     Route::post('/export-quote-summary', [ExportReportController::class, 'exportReport']);
+    Route::get('/fetch-all', [ExportReportController::class, 'reports']);
 });
